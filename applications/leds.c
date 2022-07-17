@@ -14,6 +14,13 @@
 static rt_base_t _led_pins[6];
 static rt_base_t _led_en_pin;
 static rt_base_t _led_latch_pin;
+static int _led_state;
+static rt_timer_t _led_timer;
+
+
+void led_enable(int state) {
+  rt_pin_write(_led_en_pin, (state)?PIN_LOW:PIN_HIGH);
+}
 
 void init_leds(void) {
   _led_en_pin = rt_pin_get("PC.9");
@@ -35,15 +42,47 @@ void init_leds(void) {
   rt_pin_mode(_led_latch_pin,PIN_MODE_OUTPUT);
   rt_pin_write(_led_latch_pin, PIN_HIGH);
   rt_pin_write(_led_en_pin, PIN_HIGH);
-}
 
-void led_enable(int state) {
-  rt_pin_write(_led_en_pin, (state)?PIN_LOW:PIN_HIGH);
+  led_enable(1);
+  _led_state = 0;
+  _led_timer = NULL;
 }
 
 void led_ctrl(int led, int state) {
   if(led < 6)
     rt_pin_write(_led_pins[led], (state)?PIN_LOW:PIN_HIGH);
+}
+
+void led_set(int state, int timeout);
+
+void _timeout_event(void* parameter){
+  led_set(0, 0);
+}
+
+void led_set(int state, int timeout) {
+  _led_state = state;
+  for(int i = 0; i < 6; i++) {
+    led_ctrl(i, state);
+  }
+  if(state && timeout > 0) {
+    if(_led_timer != NULL) {
+      rt_timer_stop(_led_timer);
+      rt_timer_delete(_led_timer);
+      _led_timer = NULL;
+    }
+    _led_timer = rt_timer_create("led_timer", _timeout_event, NULL, timeout, RT_TIMER_FLAG_ONE_SHOT | RT_TIMER_FLAG_SOFT_TIMER);
+    rt_timer_start(_led_timer);
+  } else {
+    if(_led_timer != NULL) {
+      rt_timer_stop(_led_timer);
+      rt_timer_delete(_led_timer);
+      _led_timer = NULL;
+    }
+  }
+}
+
+int led_state(void) {
+  return _led_state;
 }
 
 /***********************************************************************************************************************

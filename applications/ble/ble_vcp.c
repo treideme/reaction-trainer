@@ -52,9 +52,10 @@ void ble_vcp_init()
     app_drv_fifo_init(&app_uart_rx_fifo, app_uart_rx_buffer, APP_UART_RX_BUFFER_LENGTH);
 }
 
+extern const char* ble_handle(char* data, size_t *len);
+
 void ble_vcp_process(void)
 {
-    uint8_t data;
     __disable_irq();
     if(uart_rx_flag)
     {
@@ -63,11 +64,16 @@ void ble_vcp_process(void)
     }
     __enable_irq();
 
-    while(app_drv_fifo_length(&app_uart_tx_fifo))
-    {
-      app_drv_fifo_read_to_same_addr(&app_uart_tx_fifo, (uint8_t *)&data, 1);
-      app_drv_fifo_write_from_same_addr(&app_uart_rx_fifo, (uint8_t *)&data, 1);
-      uart_rx_flag = true;
+    int len = app_drv_fifo_length(&app_uart_tx_fifo);
+    if(len > 0) {
+      char cmd[80];
+      app_drv_fifo_read(&app_uart_tx_fifo, (uint8_t *)cmd, &len);
+      cmd[len] = '\0'; // force zero termination
+      const char*result = ble_handle(cmd, &len);
+      if(len > 0) {
+        app_drv_fifo_write(&app_uart_rx_fifo, (uint8_t *) result, &len);
+        uart_rx_flag = true;
+      }
     }
     if(uart_rx_flag) {
       rt_kprintf("uart_rx_flag\r\n");
@@ -95,7 +101,7 @@ void on_bleuartServiceEvt(uint16_t connection_handle, ble_uart_evt_t *p_evt)
             rt_kprintf("BLE RX DATA len:%d\r\n", p_evt->data.length);
 
             //ble to uart
-        ble_vcp_to_app((uint8_t *) p_evt->data.p_data, p_evt->data.length);
+             ble_vcp_to_app((uint8_t *) p_evt->data.p_data, p_evt->data.length);
 
             break;
         default:
@@ -171,7 +177,7 @@ static uint8_t scanRspData[] = {
     // complete name
     18, // length of this data
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'R', 'e', 'a', 'c', 't', 'i', 'o', 'n', ' ', 'T', 'r', 'a', 'i', 'n', 'e', 'r',
+    'R', 'e', 'a', 'c', 't', 'i', 'o', 'n', ' ', 'T', 'r', 'a', 'i', 'n', 'e', 'r', '\0',
     // connection interval range
     0x05, // length of this data
     GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE,
@@ -204,7 +210,7 @@ static uint8_t advertData[] = {
     HI_UINT16(SIMPLEPROFILE_SERV_UUID)};
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Reaction Trainer";
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "ReactionTrainer";
 
 // Connection item list
 static peripheralConnItem_t peripheralConnList;

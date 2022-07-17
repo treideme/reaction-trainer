@@ -21,7 +21,7 @@ int main(void) {
   rt_thread_t ble_thread = rt_thread_create("ble_loop",
                                             ble_loop,
                                             NULL,
-                                            512,
+                                            1024,
                                             (RT_MAIN_THREAD_PRIORITY + 10),
                                             1);
   if (ble_thread != RT_NULL)
