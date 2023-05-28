@@ -24,7 +24,12 @@ __attribute__((aligned(4))) u32 MEM_BUF[BLE_MEMHEAP_SIZE / 4];
 uint8_t const MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 #endif
 
-// TMOS process thread
+/**
+ * TMOS event handler. This is soo ugly, please WCH open-source that BLE stack so we can fix this mess.
+ * WTF do I have to poll another OS in a tight-loop to just make BLE work. This could be much better
+ * handled in a purely-event driven fashion and hence better integrate with RTThread.
+ * @param paramenter
+ */
 void ble_loop(void* paramenter)
 {
   while (1)
@@ -48,14 +53,15 @@ int main(void)
     rt_kprintf("MCU-CH32V208WBU6\r\n");
   rt_thread_t peripheral = rt_thread_create("ble_loop",
                                             ble_loop,
-                                            0,
+                                            NULL,
                                             1024,
-                                            (RT_MAIN_THREAD_PRIORITY+1),
-                                            5);
+                                            (RT_MAIN_THREAD_PRIORITY+10),
+                                            10);
   if (peripheral != RT_NULL)
     rt_thread_startup(peripheral);
   while(1)
   {
-    rt_thread_mdelay(100);
+    rt_thread_mdelay(1000);
+    rt_kprintf(".");
   }
 }

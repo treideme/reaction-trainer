@@ -40,7 +40,7 @@ void HardFault_Handler(void)
 {
     GET_INT_SP();
     rt_interrupt_enter();
-    rt_kprintf(" hardfult\r\n");
+    rt_kprintf(" Hard Fault\r\n");
     rt_interrupt_leave();
     FREE_INT_SP();
 
