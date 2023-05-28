@@ -1,0 +1,9 @@
+__pycache__
+rtconfig.h
+build
+Libraries/ch32_drivers/*.s
+Libraries/ch32_drivers/*.o
+Libraries/ch32_drivers/*.i
+rtthread.bin
+rtthread.elf
+rtthread.map
