@@ -44,7 +44,6 @@ void ble_loop(void* paramenter)
 
 int main(void)
 {
-  PRINT("%s\n", VER_LIB);
   WCHBLE_Init();
   HAL_Init();
   GAPRole_PeripheralInit();

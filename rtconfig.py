@@ -40,9 +40,11 @@ if PLATFORM == 'gcc':
     OBJDUMP = PREFIX + 'objdump'
     OBJCPY = PREFIX + 'objcopy'
 
-    DEVICE = ' -march=rv32imac -mabi=ilp32 -DUSE_PLIC -DUSE_M_TIME -DNO_INIT -mcmodel=medany -msmall-data-limit=8 -L.  -nostartfiles  -lc '
+    DEVICE = ' -march=rv32imacxw -mabi=ilp32 -mcmodel=medany -mno-save-restore -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common'+ \
+             ' -DUSE_PLIC -DUSE_M_TIME -DNO_INIT  -msmall-data-limit=8 -L.  -nostartfiles  -lc '
     CFLAGS = DEVICE
     CFLAGS += ' -save-temps=obj'
+    CFLAGS += ' -Wall -Wextra'
     AFLAGS = '-c'+ DEVICE + ' -x assembler-with-cpp'
     LFLAGS = DEVICE
     LFLAGS += ' -Wl,--gc-sections,-cref,-Map=' + MAP_FILE
@@ -52,10 +54,10 @@ if PLATFORM == 'gcc':
     LPATH = ''
 
     if BUILD == 'debug':
-        CFLAGS += ' -O0 -g3'
+        CFLAGS += ' -Os -g3'
         AFLAGS += ' -g3'
     else:
-        CFLAGS += ' -O2'
+        CFLAGS += ' -Os'
 
     POST_ACTION = OBJCPY + ' -O binary $TARGET ' + TARGET_NAME + '\n'
     POST_ACTION += SIZE + ' $TARGET\n'
