@@ -62,7 +62,6 @@ void app_uart_process(void)
     {
         app_drv_fifo_read_to_same_addr(&app_uart_tx_fifo, (uint8_t *)&data, 1);
         USART_SendData(USART3, data);
-        PRINT("RECV: %c\r\n", data);
         while(USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET) /* waiting for sending finish */
         {
         }
@@ -512,7 +511,6 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
                     {
                         tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 4);
                         uart_to_ble_send_evt_cnt++;
-                        PRINT("NO TIME OUT\r\n");
                     }
                 }
 

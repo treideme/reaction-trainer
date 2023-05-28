@@ -24,6 +24,19 @@ __attribute__((aligned(4))) u32 MEM_BUF[BLE_MEMHEAP_SIZE / 4];
 uint8_t const MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 #endif
 
+// TMOS process thread
+void ble_loop(void* paramenter)
+{
+  while (1)
+  {
+    /* waiting for an event to occur */
+    TMOS_SystemProcess();
+    app_uart_process();
+    /* Serve and process events */
+    rt_thread_yield();
+  }
+}
+
 int main(void)
 {
   PRINT("%s\n", VER_LIB);
@@ -33,10 +46,16 @@ int main(void)
   Peripheral_Init();
   app_uart_init();
     rt_kprintf("MCU-CH32V208WBU6\r\n");
-    while(1)
-    {
-      TMOS_SystemProcess();
-      app_uart_process();
-      rt_thread_yield();
-    }
+  rt_thread_t peripheral = rt_thread_create("ble_loop",
+                                            ble_loop,
+                                            0,
+                                            1024,
+                                            (RT_MAIN_THREAD_PRIORITY+1),
+                                            5);
+  if (peripheral != RT_NULL)
+    rt_thread_startup(peripheral);
+  while(1)
+  {
+    rt_thread_mdelay(100);
+  }
 }
