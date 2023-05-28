@@ -3,6 +3,8 @@ from building import *
 cwd = GetCurrentDir()
 src = []
 path =  [cwd]
+LIBS = []
+LIBPATH = []
 
 if  GetDepend('SOC_RISCV_FAMILY_CH32'):
 
@@ -39,6 +41,14 @@ if  GetDepend('SOC_RISCV_FAMILY_CH32'):
     if GetDepend('BSP_USING_HWTIMER'):
         src += ['drv_hwtimer.c']
 
-group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path)
+    # Link in wchble library into drivers to make sure it gets included in the build
+    if  GetDepend('SOC_RISCV_SERIES_WCHBLE'):
+        LIBS += ['wchble']
+        LIBPATH += [os.path.join(GetCurrentDir(), '..', 'wchble')]
+        path += [os.path.join(GetCurrentDir(), '..', 'wchble')]
+        print('Node %s' % LIBPATH)
+
+
+group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path, LIBS = LIBS, LIBPATH = LIBPATH)
 
 Return('group')

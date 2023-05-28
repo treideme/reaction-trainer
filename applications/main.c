@@ -9,22 +9,34 @@
  */
 
 #include "ch32v20x.h"
+#include "wchble.h"
+#include "config.h"
 #include <rtthread.h>
 #include <rthw.h>
 #include "drivers/pin.h"
 #include <board.h>
 
-#define LED0 rt_pin_get("PA.0")
+/*********************************************************************
+ * GLOBAL TYPEDEFS
+ */
+__attribute__((aligned(4))) u32 MEM_BUF[BLE_MEMHEAP_SIZE / 4];
+#if(defined(BLE_MAC)) && (BLE_MAC == TRUE)
+uint8_t const MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
+#endif
 
 int main(void)
 {
-    rt_pin_mode(LED0,PIN_MODE_OUTPUT);
+  PRINT("%s\n", VER_LIB);
+  WCHBLE_Init();
+  HAL_Init();
+  GAPRole_PeripheralInit();
+  Peripheral_Init();
+  app_uart_init();
     rt_kprintf("MCU-CH32V208WBU6\r\n");
     while(1)
     {
-        rt_pin_write(LED0, PIN_HIGH);
-        rt_thread_mdelay(500);
-        rt_pin_write(LED0, PIN_LOW);
-        rt_thread_mdelay(500);
+      TMOS_SystemProcess();
+      app_uart_process();
+      rt_thread_yield();
     }
 }

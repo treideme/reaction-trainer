@@ -5,8 +5,9 @@ cwd     = GetCurrentDir()
 CPPPATH = [cwd]
 src     = Glob('*.c')
 
-if GetDepend(['PKG_USING_RTDUINO']) and not GetDepend(['RTDUINO_NO_SETUP_LOOP']):
-    src += ['arduino_main.cpp']
+# Add BLE stack
+src     += Glob('ble/*.c')
+CPPPATH += [os.path.join(GetCurrentDir(), 'ble')]
 
 group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)
 

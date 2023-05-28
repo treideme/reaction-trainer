@@ -28,3 +28,8 @@ config SOC_SERIES_CH569
     bool
     select SOC_FAMILY_CH56X
     select RT_USING_HW_ATOMIC
+
+# Enable linking of wchble
+config SOC_RISCV_SERIES_WCHBLE
+    bool
+    default y
