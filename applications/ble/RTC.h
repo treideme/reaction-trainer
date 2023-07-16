@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : RTC.h
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2016/04/12
- * Description        :
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/**
+ * @file RTC.h
+ * @brief HAL RTC functions for timing the TMOS stack for BLE.
+ * @author Thomas Reidemeister <treideme@gmail.com>, WCH
+ * @copyright 2023 Thomas Reidemeister
+ * @license Apache-2.0
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * @brief This file is a modified version of the original WCH file.
+ */
 
 /******************************************************************************/
 #ifndef __RTC_H
@@ -19,19 +19,10 @@ extern "C" {
 #endif
 
 
-extern volatile uint32_t RTCTigFlag;
-
 /**
  * @brief   Initialize time Service.
  */
 void HAL_TimeInit(void);
-
-/**
- * @brief   Configure RTC trigger time
- *
- * @param   time    - Trigger time.
- */
-extern void RTC_SetTignTime(uint32_t time);
 
 #ifdef __cplusplus
 }

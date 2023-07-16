@@ -1,48 +1,19 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : RTC.c
- * Author             : WCH
- * Version            : V1.2
- * Date               : 2022/01/18
- * Description        : RTC configuration and its initialization
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/**
+ * @file RTC.c
+ * @brief HAL RTC functions for timing the TMOS stack for BLE.
+ * @author Thomas Reidemeister <treideme@gmail.com>, WCH
+ * @copyright 2023 Thomas Reidemeister
+ * @license Apache-2.0
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * @brief This file is a modified version of the original WCH file.
+ */
 
 /******************************************************************************/
 /* Header file contains */
 #include "HAL.h"
-
-/*********************************************************************
- * CONSTANTS
- */
-#define RTC_INIT_TIME_HOUR      0
-#define RTC_INIT_TIME_MINUTE    0
-#define RTC_INIT_TIME_SECEND    0
-
-/***************************************************
- * Global variables
- */
-volatile uint32_t RTCTigFlag;
-
-/*******************************************************************************
- * @fn      RTC_SetTignTime
- *
- * @brief   Configure RTC trigger time
- *
- * @param   time    - Trigger time.
- *
- * @return  None.
- */
-void RTC_SetTignTime(uint32_t time)
-{
-    RTC_WaitForLastTask();
-    RTC_SetAlarm(time);
-    RTC_WaitForLastTask();
-    RTCTigFlag = 0;
-}
-
+#include "rtthread.h"
 
 /*******************************************************************************
  * @fn      HAL_Time0Init
@@ -55,7 +26,6 @@ void RTC_SetTignTime(uint32_t time)
  */
 void HAL_TimeInit(void)
 {
-    uint16_t temp=0;
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR|RCC_APB1Periph_BKP, ENABLE);
     PWR_BackupAccessCmd(ENABLE);
 #if( CLK_OSC32K )
@@ -90,7 +60,7 @@ void HAL_TimeInit(void)
     TMOS_TimerInit( RTC_GetCounter );
 }
 
-__attribute__((interrupt()));
+__attribute__((interrupt()))
 void RTCAlarm_IRQHandler(void)
 {
   GET_INT_SP();
@@ -98,8 +68,6 @@ void RTCAlarm_IRQHandler(void)
   rt_interrupt_enter();
 
     TMOS_TimerIRQHandler();
-    RTCTigFlag = 1;
-    EXTI_ClearITPendingBit(EXTI_Line17);
     RTC_ClearITPendingBit(RTC_IT_ALR);
     RTC_WaitForLastTask();
 

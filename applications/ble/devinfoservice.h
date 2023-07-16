@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : devinfoservice.h
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2018/12/11
- * Description        :
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/**
+ * @file devinfoservice.h
+ * @brief Device Information Service.
+ * @author Thomas Reidemeister <treideme@gmail.com>, WCH
+ * @copyright 2023 Thomas Reidemeister
+ * @license Apache-2.0
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * @brief This file is a modified version of the original WCH file.
+ */
 
 #ifndef DEVINFOSERVICE_H
 #define DEVINFOSERVICE_H
@@ -37,9 +37,6 @@ extern "C" {
 #define DEVINFO_PNP_ID                 8
 
 // IEEE 11073 authoritative body values
-#define DEVINFO_11073_BODY_EMPTY       0
-#define DEVINFO_11073_BODY_IEEE        1
-#define DEVINFO_11073_BODY_CONTINUA    2
 #define DEVINFO_11073_BODY_EXP         254
 
 // System ID length
@@ -71,33 +68,6 @@ extern "C" {
  */
 
 extern bStatus_t DevInfo_AddService(void);
-
-/*********************************************************************
- * @fn      DevInfo_SetParameter
- *
- * @brief   Set a Device Information parameter.
- *
- * @param   param - Profile parameter ID
- * @param   len - length of data to right
- * @param   value - pointer to data to write.  This is dependent on
- *          the parameter ID and WILL be cast to the appropriate
- *          data type (example: data type of uint16_t will be cast to
- *          uint16_t pointer).
- *
- * @return  bStatus_t
- */
-bStatus_t DevInfo_SetParameter(uint8_t param, uint8_t len, void *value);
-
-/*
- * DevInfo_GetParameter - Get a Device Information parameter.
- *
- *    param - Profile parameter ID
- *    value - pointer to data to write.  This is dependent on
- *          the parameter ID and WILL be cast to the appropriate
- *          data type (example: data type of uint16_t will be cast to
- *          uint16_t pointer).
- */
-extern bStatus_t DevInfo_GetParameter(uint8_t param, void *value);
 
 /*********************************************************************
 *********************************************************************/

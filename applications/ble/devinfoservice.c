@@ -1,19 +1,19 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : devinfoservice.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2018/12/10
- * Description        : Device information service
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/**
+ * @file devinfoservice.c
+ * @brief Device Information Service.
+ * @author Thomas Reidemeister <treideme@gmail.com>, WCH
+ * @copyright 2023 Thomas Reidemeister
+ * @license Apache-2.0
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * @brief This file is a modified version of the original WCH file.
+ */
 
 /*********************************************************************
  * INCLUDES
  */
-#include "config.h"
+#include "ble_config.h"
 #include "devinfoservice.h"
 
 /*********************************************************************
@@ -313,100 +313,6 @@ bStatus_t DevInfo_AddService(void)
                                        GATT_NUM_ATTRS(devInfoAttrTbl),
                                        GATT_MAX_ENCRYPT_KEY_SIZE,
                                        &devInfoCBs);
-}
-
-/*********************************************************************
- * @fn      DevInfo_SetParameter
- *
- * @brief   Set a Device Information parameter.
- *
- * @param   param - Profile parameter ID
- * @param   len - length of data to write
- * @param   value - pointer to data to write.  This is dependent on
- *          the parameter ID and WILL be cast to the appropriate
- *          data type (example: data type of uint16_t will be cast to
- *          uint16_t pointer).
- *
- * @return  bStatus_t
- */
-bStatus_t DevInfo_SetParameter(uint8_t param, uint8_t len, void *value)
-{
-    bStatus_t ret = SUCCESS;
-
-    switch(param)
-    {
-        case DEVINFO_SYSTEM_ID:
-            tmos_memcpy(devInfoSystemId, value, len);
-            break;
-
-        default:
-            ret = INVALIDPARAMETER;
-            break;
-    }
-
-    return (ret);
-}
-
-/*********************************************************************
- * @fn      DevInfo_GetParameter
- *
- * @brief   Get a Device Information parameter.
- *
- * @param   param - Profile parameter ID
- * @param   value - pointer to data to get.  This is dependent on
- *          the parameter ID and WILL be cast to the appropriate
- *          data type (example: data type of uint16_t will be cast to
- *          uint16_t pointer).
- *
- * @return  bStatus_t
- */
-bStatus_t DevInfo_GetParameter(uint8_t param, void *value)
-{
-    bStatus_t ret = SUCCESS;
-
-    switch(param)
-    {
-        case DEVINFO_SYSTEM_ID:
-            tmos_memcpy(value, devInfoSystemId, sizeof(devInfoSystemId));
-            break;
-
-        case DEVINFO_MODEL_NUMBER:
-            tmos_memcpy(value, devInfoModelNumber, sizeof(devInfoModelNumber));
-            break;
-        case DEVINFO_SERIAL_NUMBER:
-            tmos_memcpy(value, devInfoSerialNumber, sizeof(devInfoSerialNumber));
-            break;
-
-        case DEVINFO_FIRMWARE_REV:
-            tmos_memcpy(value, devInfoFirmwareRev, sizeof(devInfoFirmwareRev));
-            break;
-
-        case DEVINFO_HARDWARE_REV:
-            tmos_memcpy(value, devInfoHardwareRev, sizeof(devInfoHardwareRev));
-            break;
-
-        case DEVINFO_SOFTWARE_REV:
-            tmos_memcpy(value, devInfoSoftwareRev, sizeof(devInfoSoftwareRev));
-            break;
-
-        case DEVINFO_MANUFACTURER_NAME:
-            tmos_memcpy(value, devInfoMfrName, sizeof(devInfoMfrName));
-            break;
-
-        case DEVINFO_11073_CERT_DATA:
-            tmos_memcpy(value, devInfo11073Cert, sizeof(devInfo11073Cert));
-            break;
-
-        case DEVINFO_PNP_ID:
-            tmos_memcpy(value, devInfoPnpId, sizeof(devInfoPnpId));
-            break;
-
-        default:
-            ret = INVALIDPARAMETER;
-            break;
-    }
-
-    return (ret);
 }
 
 /*********************************************************************

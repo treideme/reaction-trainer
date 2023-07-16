@@ -1,23 +1,22 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : ble_uart_service.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2022/01/19
- * Description        :
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/**
+ * @file ble_uart_service.c
+ * @brief BLE UART Configuration.
+ * @author Thomas Reidemeister <treideme@gmail.com>, WCH
+ * @copyright 2023 Thomas Reidemeister
+ * @license Apache-2.0
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * @brief This file is a modified version of the original WCH file.
+ */
 
 /*********************************************************************
  * INCLUDES
  */
 
-#include "config.h"
-#include "gattprofile.h"
-#include "stdint.h"
+#include "ble_config.h"
 #include "ble_uart_service.h"
+#include "rtthread.h"
 
 /*********************************************************************
  * MACROS
@@ -26,8 +25,6 @@
 /*********************************************************************
  * CONSTANTS
  */
-
-#define SERVAPP_NUM_ATTR_SUPPORTED    7
 
 #define RAWPASS_TX_VALUE_HANDLE       4
 #define RAWPASS_RX_VALUE_HANDLE       2
@@ -38,17 +35,6 @@
 /*********************************************************************
  * GLOBAL VARIABLES
  */
-////ble_uart GATT Profile Service UUID
-//const uint8_t ble_uart_ServiceUUID[ATT_UUID_SIZE] =
-//{0x55, 0xe4,0x05,0xd2,0xaf,0x9f,0xa9,0x8f,0xe5,0x4a,0x7d,0xfe,0x43,0x53,0x53,0x49};
-
-//// Characteristic rx uuid
-//const uint8_t ble_uart_RxCharUUID[ATT_UUID_SIZE] =
-//{0xb3,0x9b,0x72,0x34,0xbe,0xec, 0xd4,0xa8,0xf4,0x43,0x41,0x88,0x43,0x53,0x53,0x49};
-
-//// Characteristic tx uuid
-//const uint8_t ble_uart_TxCharUUID[ATT_UUID_SIZE] =
-//{0x16,0x96,0x24,0x47,0xc6,0x23, 0x61,0xba,0xd9,0x4b,0x4d,0x1e,0x43,0x53,0x53,0x49};
 
 // ble_uart GATT Profile Service UUID
 const uint8_t ble_uart_ServiceUUID[ATT_UUID_SIZE] =
@@ -202,7 +188,7 @@ bStatus_t ble_uart_add_service(ble_uart_ProfileChangeCB_t cb)
                                          GATT_MAX_ENCRYPT_KEY_SIZE,
                                          &ble_uart_ProfileCBs);
     if(status != SUCCESS)
-        PRINT("Add ble uart service failed!\n");
+        rt_kprintf("Add ble uart service failed!\n");
     ble_uart_AppCBs = cb;
 
     return (status);
@@ -226,7 +212,7 @@ static bStatus_t ble_uart_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr
                                      uint8_t *pValue, uint16_t *pLen, uint16_t offset, uint16_t maxLen, uint8_t method)
 {
     bStatus_t status = SUCCESS;
-    PRINT("ReadAttrCB\n");
+    rt_kprintf("ReadAttrCB\n");
     // Make sure it's not a blob operation (no attributes in the profile are long)
     if(pAttr->type.len == ATT_BT_UUID_SIZE)
     {
@@ -247,7 +233,7 @@ static bStatus_t ble_uart_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr
         }
         else if(tmos_memcmp(pAttr->type.uuid, ble_uart_RxCharUUID, 16))
         {
-            PRINT("read tx char\n");
+            rt_kprintf("read tx char\n");
         }
     }
 

@@ -1,53 +1,26 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : ch32v20x_it.c
- * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2022/06/16
- * Description        : Main Interrupt Service Routines.
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/**
+ * @file ch32v20x_it.c
+ * @brief BLE Interrupt routines.
+ * @author Thomas Reidemeister <treideme@gmail.com>, WCH
+ * @copyright 2023 Thomas Reidemeister
+ * @license Apache-2.0
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * @brief This file is a modified version of the original WCH file.
+ */
 
 /*********************************************************************
  * INCLUDES
  */
 #include "ch32v20x_it.h"
-#include "config.h"
+#include "ble_config.h"
 
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
-//void NMI_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
-//void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void BB_IRQHandler(void) __attribute__((interrupt()));
 void LLE_IRQHandler(void) __attribute__((interrupt()));
-
-///*********************************************************************
-// * @fn      NMI_Handler
-// *
-// * @brief   This function handles NMI exception.
-// *
-// * @return  None
-// */
-//void NMI_Handler(void)
-//{
-//}
-
-///*********************************************************************
-// * @fn      HardFault_Handler
-// *
-// * @brief   This function handles Hard Fault exception.
-// *
-// * @return  None
-// */
-//void HardFault_Handler(void)
-//{
-//    while(1)
-//    {
-//    }
-//}
 
 /*********************************************************************
  * @fn      BB_IRQHandler

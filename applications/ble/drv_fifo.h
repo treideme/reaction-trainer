@@ -1,17 +1,17 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : app_drv_fifo.h
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2022/01/19
- * Description        :
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/**
+ * @file drv_fifo.h
+ * @brief Simple FIFO implementation.
+ * @author Thomas Reidemeister <treideme@gmail.com>, WCH
+ * @copyright 2023 Thomas Reidemeister
+ * @license Apache-2.0
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * @brief This file is a modified version of the original WCH file.
+ */
 
-#ifndef __APP_DRV_FIFO_H__
-#define __APP_DRV_FIFO_H__
+#ifndef __DRV_FIFO_H__
+#define __DRV_FIFO_H__
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -130,4 +130,4 @@ app_drv_fifo_result_t
 app_drv_fifo_read_to_same_addr(app_drv_fifo_t *fifo, uint8_t *data,
                                uint16_t read_length);
 
-#endif // __APP_DRV_FIFO_H__
+#endif // __DRV_FIFO_H__
