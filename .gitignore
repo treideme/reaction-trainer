@@ -7,3 +7,8 @@ Libraries/ch32_drivers/*.i
 rtthread.bin
 rtthread.elf
 rtthread.map
+
+# CLION
+.idea
+compile_commands.json
+.sconsign.sqlite
