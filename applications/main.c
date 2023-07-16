@@ -36,12 +36,16 @@ uint8_t const MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
  * @param paramenter
  * FIXME: turn this into a timer-based event handler
  */
-void ble_loop(void *paramenter) {
-  /* waiting for an event to occur */
-  TMOS_SystemProcess();
-  app_uart_process();
-  /* Serve and process events */
-  rt_thread_yield();
+void ble_loop(void* paramenter)
+{
+  while (1)
+  {
+    /* waiting for an event to occur */
+    TMOS_SystemProcess();
+    app_uart_process();
+    /* Serve and process events */
+    rt_thread_yield();
+  }
 }
 
 int main(void) {
@@ -56,9 +60,9 @@ int main(void) {
   rt_thread_t ble_thread = rt_thread_create("ble_loop",
                                             ble_loop,
                                             NULL,
-                                            256,
+                                            1024,
                                             (RT_MAIN_THREAD_PRIORITY + 10),
-                                            1);
+                                            10);
   if (ble_thread != RT_NULL)
     rt_thread_startup(ble_thread);
   while (1) {
