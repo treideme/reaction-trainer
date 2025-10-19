@@ -4,7 +4,7 @@
 
 This repository contains the firmware sources for the RT-Thread IoT contest. 
 
-See [my blog post](https://www.reidemeister.com/?p=624) for more information and build updates.
+See [my blog post](https://reidemeister.com/blog/2023.04.30) for more information and build updates.
 
  * [Hardware Designs](https://github.com/treideme/reaction-trainer-hw)
  * [Android Application Sources](https://github.com/treideme/reaction-trainer-app)
